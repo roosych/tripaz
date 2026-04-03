@@ -1,0 +1,33 @@
+<?php
+
+return [
+    'types' => [
+        'hotel'       => 'Otel',
+        'home'        => 'Ev / Mənzil',
+        'home_short'  => 'Ev',
+        'tour'        => 'Tur',
+        'activity'    => 'Fəaliyyət',
+        'guide'       => 'Bələdçi',
+        'restaurant'  => 'Restoran',
+        'hotels'      => 'Otellər',
+        'homes'       => 'Evlər',
+        'tours'       => 'Turlar',
+        'activities'  => 'Fəaliyyətlər',
+        'guides'      => 'Bələdçilər',
+        'restaurants' => 'Restoranlar',
+    ],
+    'yes'          => 'Bəli',
+    'no'           => 'Xeyr',
+    'loading'      => 'Yüklənir...',
+    'save'         => 'Saxla',
+    'saved'        => 'Saxlanıldı',
+    'share'        => 'Paylaş',
+    'featured'     => 'Tövsiyə edilir',
+    'reviews_one'  => 'rəy',
+    'reviews_other'=> 'rəy',
+    'guests'       => 'qonaq',
+    'bed'          => 'yataq',
+    'beds'         => 'yataq',
+    'sqm'          => 'm²',
+    'yrs_exp'      => 'il təcrübə',
+];

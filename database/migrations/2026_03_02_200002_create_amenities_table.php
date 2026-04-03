@@ -1,0 +1,27 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('amenities', function (Blueprint $table) {
+            $table->id();
+            $table->enum('listing_type', ['hotel', 'home', 'tour', 'activity', 'guide', 'restaurant'])->nullable();
+            $table->string('name_az');
+            $table->string('name_ru');
+            $table->string('name_en');
+            $table->string('icon', 100)->nullable();
+            $table->string('group', 100)->nullable();
+            $table->timestamps();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('amenities');
+    }
+};

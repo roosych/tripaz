@@ -1,0 +1,33 @@
+<?php
+
+return [
+    'types' => [
+        'hotel'       => 'Hotel',
+        'home'        => 'Home / Apt',
+        'home_short'  => 'Home',
+        'tour'        => 'Tour',
+        'activity'    => 'Activity',
+        'guide'       => 'Guide',
+        'restaurant'  => 'Restaurant',
+        'hotels'      => 'Hotels',
+        'homes'       => 'Homes',
+        'tours'       => 'Tours',
+        'activities'  => 'Activities',
+        'guides'      => 'Guides',
+        'restaurants' => 'Restaurants',
+    ],
+    'yes'          => 'Yes',
+    'no'           => 'No',
+    'loading'      => 'Loading...',
+    'save'         => 'Save',
+    'saved'        => 'Saved',
+    'share'        => 'Share',
+    'featured'     => 'Featured',
+    'reviews_one'  => 'review',
+    'reviews_other'=> 'reviews',
+    'guests'       => 'guests',
+    'bed'          => 'bed',
+    'beds'         => 'beds',
+    'sqm'          => 'm²',
+    'yrs_exp'      => 'yrs exp',
+];

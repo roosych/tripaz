@@ -1,0 +1,718 @@
+/* ============================================================
+   TripAz — Global Theme
+   Design system inspired by clean, minimal property listing UIs
+   ============================================================ */
+
+/* 1. CSS Variables / Design Tokens
+   ---------------------------------------------------------- */
+:root {
+    --tripaz-bg:              #FFFFFF;
+    --tripaz-card-bg:         #FFFFFF;
+    --tripaz-primary:         #0968f1;
+    --tripaz-primary-hover:   #065bd1;
+    --tripaz-dark:            #1A1A2E;
+    --tripaz-text-primary:    #1A1A2E;
+    --tripaz-text-secondary:  #6B7280;
+    --tripaz-border:          rgba(0,0,0,0.07);
+    --tripaz-shadow:          0 2px 12px rgba(0,0,0,0.07);
+    --tripaz-shadow-hover:    0 8px 28px rgba(0,0,0,0.13);
+    --tripaz-radius-card:     14px;
+    --tripaz-radius-sm:       8px;
+    --tripaz-radius-pill:     999px;
+    --tripaz-font:            'Inter', system-ui, -apple-system, sans-serif;
+}
+
+
+/* 2. Base — body, links
+   ---------------------------------------------------------- */
+body {
+    font-family: var(--tripaz-font);
+    background-color: var(--tripaz-bg);
+    color: var(--tripaz-text-primary);
+}
+
+a {
+    color: var(--tripaz-primary);
+}
+
+a:hover {
+    color: var(--tripaz-primary-hover);
+}
+
+
+/* 3. Navbar
+   ---------------------------------------------------------- */
+.navbar {
+    border-bottom: 1px solid var(--tripaz-border);
+    box-shadow: none !important;
+}
+
+.navbar-brand {
+    font-weight: 800;
+    font-size: 1.5rem;
+    letter-spacing: -0.5px;
+}
+
+.navbar-brand span.brand-az {
+    color: var(--tripaz-primary);
+}
+
+.navbar .nav-link {
+    font-weight: 500;
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    transition: background-color 0.15s;
+}
+
+.navbar .nav-link:hover {
+    background-color: rgba(68, 151, 230, 0.12);
+}
+
+.navbar .nav-link.active {
+    color: var(--tripaz-primary) !important;
+    background-color: rgba(68, 151, 230, 0.12);
+}
+
+
+/* 4. Buttons — override Bootstrap primary to use orange accent
+   ---------------------------------------------------------- */
+.btn-primary {
+    background-color: var(--tripaz-primary);
+    border-color: var(--tripaz-primary);
+    color: #fff;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary.active {
+    background-color: var(--tripaz-primary-hover);
+    border-color: var(--tripaz-primary-hover);
+    color: #fff;
+}
+
+.btn-primary:focus-visible,
+.btn-primary:focus {
+    box-shadow: 0 0 0 0.25rem rgba(255, 107, 53, 0.35);
+}
+
+.btn-outline-primary {
+    color: var(--tripaz-primary);
+    border-color: var(--tripaz-primary);
+}
+
+.btn-outline-primary:hover,
+.btn-outline-primary:focus,
+.btn-outline-primary:active,
+.btn-outline-primary.active {
+    background-color: var(--tripaz-primary);
+    border-color: var(--tripaz-primary);
+    color: #fff;
+}
+
+.btn-outline-primary:focus-visible,
+.btn-outline-primary:focus {
+    box-shadow: 0 0 0 0.25rem rgba(255, 107, 53, 0.35);
+}
+
+/* Form control focus ring */
+.form-control:focus,
+.form-select:focus {
+    border-color: rgba(255, 107, 53, 0.5);
+    box-shadow: 0 0 0 0.25rem rgba(255, 107, 53, 0.20);
+}
+
+
+/* 5. Cards — .listing-card
+   ---------------------------------------------------------- */
+.listing-card {
+    transition: box-shadow 0.2s, transform 0.2s;
+    border: 1px solid var(--tripaz-border);
+    border-radius: var(--tripaz-radius-card);
+    background-color: var(--tripaz-card-bg);
+    box-shadow: var(--tripaz-shadow);
+}
+
+.listing-card:hover {
+    box-shadow: var(--tripaz-shadow-hover);
+    transform: translateY(-3px);
+}
+
+/* .listing-card-img — replaces .card-img-top; height/object-fit set inline per card */
+.listing-card-img {
+    border-top-left-radius: var(--tripaz-radius-card);
+    border-top-right-radius: var(--tripaz-radius-card);
+}
+
+
+/* 6. Type badges — .badge-hotel, .badge-home, etc.
+   ---------------------------------------------------------- */
+.badge-hotel      { background-color: var(--tripaz-primary); color: #fff; }
+.badge-home       { background-color: #0dcaf0; color: #000; }
+.badge-tour       { background-color: #198754; color: #fff; }
+.badge-activity   { background-color: #ffc107; color: #000; }
+.badge-guide      { background-color: #6c757d; color: #fff; }
+.badge-restaurant { background-color: #dc3545; color: #fff; }
+
+
+/* 7. Star rating
+   ---------------------------------------------------------- */
+.star-rating .bi-star-fill { color: #ffc107; }
+.star-rating .bi-star      { color: #dee2e6; }
+.star-rating .bi-star-half { color: #ffc107; }
+
+
+/* 8. Sidebar filter
+   ---------------------------------------------------------- */
+.filter-sidebar {
+    position: sticky;
+    top: 1rem;
+}
+
+
+/* 9. Gallery
+   ---------------------------------------------------------- */
+.gallery-carousel .carousel-item img {
+    height: 420px;
+    object-fit: cover;
+    width: 100%;
+    border-radius: var(--tripaz-radius-sm);
+}
+
+.gallery-thumbs {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding: 6px 0;
+}
+
+.gallery-thumbs img {
+    width: 72px;
+    height: 54px;
+    object-fit: cover;
+    border-radius: 4px;
+    cursor: pointer;
+    opacity: 0.65;
+    transition: opacity 0.15s;
+    flex-shrink: 0;
+}
+
+.gallery-thumbs img:hover,
+.gallery-thumbs img.active {
+    opacity: 1;
+    outline: 2px solid var(--tripaz-primary);
+}
+
+
+/* 10. Listing page header (breadcrumb-style banner)
+   ---------------------------------------------------------- */
+.listing-page-header {
+    background-image: url('/images/breadcrumb-bg8.png');
+    background-size: cover;
+    background-position: center;
+    background-color: #f8fffe;
+    padding: 3.5rem 0 3rem;
+}
+
+.listing-page-header-inner {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.listing-page-header-body {
+    flex: 1 1 0;
+    min-width: 0;
+}
+
+.listing-page-stars {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 1rem;
+}
+
+.listing-page-stars .bi-star-fill,
+.listing-page-stars .bi-star-half {
+    color: #ffc107;
+}
+
+.listing-page-stars .bi-star {
+    color: #d1d5db;
+}
+
+.listing-page-stars-value {
+    margin-left: 6px;
+    font-weight: 600;
+    color: var(--tripaz-text-primary);
+    font-size: 0.95rem;
+}
+
+.listing-page-stars-count {
+    color: var(--tripaz-text-secondary);
+    font-size: 0.85rem;
+    margin-left: 4px;
+}
+
+.listing-page-title {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--tripaz-text-primary);
+    line-height: 1.2;
+    margin-bottom: 0.6rem;
+}
+
+.listing-page-location {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    color: var(--tripaz-text-secondary);
+    font-size: 0.95rem;
+    margin-bottom: 0;
+}
+
+.listing-page-location .bi {
+    color: var(--tripaz-primary);
+    flex-shrink: 0;
+}
+
+.listing-page-map-link {
+    color: var(--tripaz-primary);
+    text-decoration: none;
+    font-weight: 500;
+    margin-left: 4px;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.15s;
+}
+
+.listing-page-map-link:hover {
+    border-bottom-color: var(--tripaz-primary);
+    color: var(--tripaz-primary);
+}
+
+.listing-page-header-actions {
+    flex-shrink: 0;
+    padding-top: 0.25rem;
+}
+
+.listing-page-fav-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--tripaz-text-primary);
+    border: 1.5px solid #d1d5db;
+    border-radius: var(--tripaz-radius-pill);
+    padding: 0.45rem 1.1rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    background: #fff;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+    white-space: nowrap;
+}
+
+.listing-page-fav-btn:hover {
+    background: #f3f4f6;
+    border-color: #9ca3af;
+    color: var(--tripaz-text-primary);
+}
+
+.listing-page-fav-btn.active {
+    background: var(--tripaz-primary);
+    border-color: var(--tripaz-primary);
+    color: #fff;
+}
+
+.listing-page-fav-btn .bi-heart-fill {
+    color: #fff;
+}
+
+
+/* 10. Listing photo grid
+   ---------------------------------------------------------- */
+.listing-photo-grid {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 4px;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.listing-photo-grid__main {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    aspect-ratio: 16 / 9;
+}
+
+.listing-photo-grid__main img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.listing-photo-grid__main:hover img {
+    transform: scale(1.02);
+}
+
+.listing-photo-grid__thumbs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 4px;
+}
+
+.listing-photo-grid__thumb {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.listing-photo-grid__thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.listing-photo-grid__thumb:hover img {
+    transform: scale(1.04);
+}
+
+/* Play icon on video cell */
+.photo-grid-play {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.52);
+    transition: background 0.15s;
+}
+
+.listing-photo-grid__main:hover .photo-grid-play {
+    background: rgba(0, 0, 0, 0.68);
+}
+
+.photo-grid-play i {
+    font-size: 3.5rem;
+    color: #fff;
+    line-height: 1;
+}
+
+/* "+N more" overlay on last cell */
+.photo-grid-more {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.52);
+    transition: background 0.15s;
+}
+
+.listing-photo-grid__thumb--more:hover .photo-grid-more {
+    background: rgba(0, 0, 0, 0.68);
+}
+
+.photo-grid-more span {
+    color: #fff;
+    font-size: 2rem;
+    font-weight: 500;
+    letter-spacing: -0.5px;
+}
+
+/* Gallery modal image */
+.gallery-modal-img {
+    max-height: calc(100vh - 80px);
+    max-width: 100%;
+    width: auto;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
+}
+
+/* YouTube iframe in modal */
+.gallery-yt-iframe {
+    border: none;
+    width: 100%;
+    height: 100%;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .listing-photo-grid {
+        grid-template-columns: 1fr;
+        height: auto;
+    }
+
+    .listing-photo-grid__main {
+        aspect-ratio: 4 / 3;
+    }
+
+    .listing-photo-grid__thumbs {
+        height: 100px;
+        grid-template-rows: 1fr;
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .listing-page-title {
+        font-size: 1.4rem;
+    }
+
+    .listing-page-header-inner {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .listing-page-header-actions {
+        padding-top: 0;
+    }
+}
+
+
+/* 11. Amenity grid
+   ---------------------------------------------------------- */
+.amenity-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.5rem;
+}
+
+@media (max-width: 768px) {
+    .amenity-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 480px) {
+    .amenity-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+.amenity-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    padding: 0.4rem 0.6rem;
+    background: var(--tripaz-bg);
+    border-radius: 6px;
+}
+
+
+/* 12. Upload area
+   ---------------------------------------------------------- */
+.upload-area {
+    border: 2px dashed #dee2e6;
+    border-radius: var(--tripaz-radius-sm);
+    padding: 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.15s, background-color 0.15s;
+}
+
+.upload-area:hover,
+.upload-area.drag-over {
+    border-color: var(--tripaz-primary);
+    background-color: rgba(255, 107, 53, 0.04);
+}
+
+
+/* 13. Tag input
+   ---------------------------------------------------------- */
+.tag-input-container {
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    padding: 0.375rem;
+    min-height: 44px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    cursor: text;
+}
+
+.tag-input-container:focus-within {
+    border-color: rgba(255, 107, 53, 0.5);
+    box-shadow: 0 0 0 0.25rem rgba(255, 107, 53, 0.20);
+}
+
+.tag-item {
+    background: #FFF0EB;
+    color: var(--tripaz-primary);
+    border-radius: 4px;
+    padding: 0.1rem 0.4rem;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.tag-item .remove-tag {
+    cursor: pointer;
+    font-size: 1rem;
+    line-height: 1;
+    color: var(--tripaz-primary);
+}
+
+.tag-real-input {
+    border: none;
+    outline: none;
+    min-width: 80px;
+    flex: 1;
+    font-size: 0.95rem;
+}
+
+
+/* 14. Booking widget
+   ---------------------------------------------------------- */
+.booking-widget {
+    position: sticky;
+    top: 1rem;
+}
+
+
+/* 15. Footer
+   ---------------------------------------------------------- */
+footer {
+    background-color: var(--tripaz-dark);
+    color: #adb5bd;
+}
+
+footer a {
+    color: #adb5bd;
+    text-decoration: none;
+}
+
+footer a:hover {
+    color: #fff;
+}
+
+
+/* 16. Page spinner
+   ---------------------------------------------------------- */
+#sort-spinner {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background-color: rgba(0,0,0,0.45);
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+}
+
+#sort-spinner.d-none { display: none !important; }
+
+
+/* 17. Locale switcher
+   ---------------------------------------------------------- */
+.locale-switcher .btn {
+    padding: 0.25rem 0.6rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border-radius: 4px;
+}
+
+.locale-switcher .btn.active {
+    background-color: var(--tripaz-primary);
+    color: #fff;
+    border-color: var(--tripaz-primary);
+}
+
+
+/* 18. Itinerary day builder
+   ---------------------------------------------------------- */
+.itinerary-day {
+    border: 1px solid #dee2e6;
+    border-radius: var(--tripaz-radius-sm);
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+    background: var(--tripaz-card-bg);
+}
+
+
+/* 19. Opening hours table
+   ---------------------------------------------------------- */
+.opening-hours-table td,
+.opening-hours-table th {
+    padding: 0.35rem 0.75rem;
+}
+
+
+/* 20. Form tabs
+   ---------------------------------------------------------- */
+.form-tab-content .tab-pane {
+    padding: 1.25rem 0;
+}
+
+
+/* 21. jQuery UI slider overrides
+   ---------------------------------------------------------- */
+.ui-slider {
+    margin: 0.5rem 0;
+}
+
+.ui-slider .ui-slider-handle:focus {
+    outline: none;
+    box-shadow: 0 0 0 0.25rem rgba(255, 107, 53, 0.35);
+}
+
+.ui-slider-horizontal .ui-slider-range {
+    background: var(--tripaz-primary);
+}
+
+/* Map */
+#listing-map {
+    height: 220px;
+    border-radius: var(--tripaz-radius-sm);
+    z-index: 1;
+}
+
+
+/* 22. Listing card image hover zoom
+   ---------------------------------------------------------- */
+.listing-card:hover .listing-card-img {
+    transform: scale(1.04);
+}
+
+
+
+/* 10. Pagination
+   ---------------------------------------------------------- */
+.tripaz-page-link {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    font-size: 0.85rem;
+    font-weight: 500;
+    border: 1px solid var(--tripaz-border);
+    background: var(--tripaz-card-bg);
+    color: var(--tripaz-text-secondary);
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.tripaz-page-link:hover {
+    background: rgba(141, 187, 63, 0.10);
+    border-color: var(--tripaz-primary);
+    color: var(--tripaz-primary);
+}
+
+.tripaz-page-active {
+    background: var(--tripaz-primary) !important;
+    border-color: var(--tripaz-primary) !important;
+    color: #fff !important;
+}
+
+.page-item.disabled .tripaz-page-link {
+    opacity: 0.4;
+    pointer-events: none;
+}
+
+.page-item.active .tripaz-page-link {
+    box-shadow: none;
+}
