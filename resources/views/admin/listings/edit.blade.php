@@ -356,9 +356,7 @@
                     <div class="mb-2">
                         <x-status-badge :status="$statusVal" />
                     </div>
-                    <select class="form-select form-select-sm mb-2"
-                            name="status"
-                            form="set-status-form">
+                    <select class="form-select form-select-sm" name="status">
                         @foreach(\App\Enums\ListingStatus::cases() as $s)
                             <option value="{{ $s->value }}"
                                     {{ $s->value === $statusVal ? 'selected' : '' }}>
@@ -366,11 +364,6 @@
                             </option>
                         @endforeach
                     </select>
-                    <button type="submit"
-                            form="set-status-form"
-                            class="btn btn-warning btn-sm w-100">
-                        <i class="ph ph-check me-1"></i>Изменить статус
-                    </button>
                 </div>
             </div>
 
@@ -602,15 +595,6 @@
 
         </div>
     </div>
-</form>
-
-{{-- Separate form for status change (outside main form to avoid nested-form issue) --}}
-<form id="set-status-form"
-      method="POST"
-      action="{{ route('admin.listings.set-status', $listing) }}"
-      style="display:none;">
-    @csrf
-    @method('PATCH')
 </form>
 
 @endsection

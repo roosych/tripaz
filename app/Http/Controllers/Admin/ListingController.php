@@ -191,11 +191,21 @@ class ListingController extends Controller
 
         $validated = $request->validate(array_merge(
             $this->validationRules($type),
-            ['user_id' => 'nullable|integer|exists:users,id'],
+            [
+                'user_id' => 'nullable|integer|exists:users,id',
+                'status'  => ['nullable', \Illuminate\Validation\Rule::in(
+                    array_map(fn ($s) => $s->value, ListingStatus::cases())
+                )],
+            ],
         ));
+
+        $newStatus = isset($validated['status'])
+            ? ListingStatus::from($validated['status'])
+            : $listing->status;
 
         $listing->update([
             'user_id'       => $validated['user_id'] ? (int) $validated['user_id'] : null,
+            'status'        => $newStatus,
             'contact_email' => $validated['contact_email'] ?? $listing->contact_email,
             'contact_phone' => $validated['contact_phone'] ?? $listing->contact_phone,
             'website_url'   => $validated['website_url'] ?? $listing->website_url,
@@ -237,6 +247,12 @@ class ListingController extends Controller
 
         $listing->generateSlug();
         $listing->save();
+
+        if ($newStatus === ListingStatus::Published) {
+            $listing->searchable();
+        } else {
+            $listing->unsearchable();
+        }
 
         return redirect()->route('admin.listings.index')
             ->with('success', "Listing [{$listing->slug}] updated successfully.");
@@ -312,32 +328,6 @@ class ListingController extends Controller
         }
 
         return back()->with('success', "Listing [{$listing->slug}] has been reinstated and is now published.");
-    }
-
-    /**
-     * Directly set the status of a listing, bypassing normal transition rules.
-     * Admin-only override — no moderation guards apply.
-     */
-    public function setStatus(Request $request, Listing $listing)
-    {
-        $this->authorize('moderate', $listing);
-
-        $validated = $request->validate([
-            'status' => ['required', 'string', \Illuminate\Validation\Rule::in(
-                array_map(fn ($s) => $s->value, ListingStatus::cases())
-            )],
-        ]);
-
-        $listing->status = ListingStatus::from($validated['status']);
-        $listing->save();
-
-        if ($listing->status === ListingStatus::Published) {
-            $listing->searchable();
-        } else {
-            $listing->unsearchable();
-        }
-
-        return back()->with('success', "Статус листинга изменён на «{$listing->status->value}».");
     }
 
     // -------------------------------------------------------------------------
