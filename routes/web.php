@@ -176,6 +176,7 @@ Route::prefix('admin')
         Route::patch('listings/{listing}/reject', [Admin\ListingController::class, 'reject'])->name('listings.reject');
         Route::patch('listings/{listing}/suspend', [Admin\ListingController::class, 'suspend'])->name('listings.suspend');
         Route::patch('listings/{listing}/reinstate', [Admin\ListingController::class, 'reinstate'])->name('listings.reinstate');
+        Route::patch('listings/{listing}/set-status', [Admin\ListingController::class, 'setStatus'])->name('listings.set-status');
 
         // Admin listing media management
         Route::post('listings/{listing}/media', [Admin\MediaController::class, 'store'])->name('listings.media.store');

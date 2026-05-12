@@ -314,6 +314,32 @@ class ListingController extends Controller
         return back()->with('success', "Listing [{$listing->slug}] has been reinstated and is now published.");
     }
 
+    /**
+     * Directly set the status of a listing, bypassing normal transition rules.
+     * Admin-only override — no moderation guards apply.
+     */
+    public function setStatus(Request $request, Listing $listing)
+    {
+        $this->authorize('moderate', $listing);
+
+        $validated = $request->validate([
+            'status' => ['required', 'string', \Illuminate\Validation\Rule::in(
+                array_map(fn ($s) => $s->value, ListingStatus::cases())
+            )],
+        ]);
+
+        $listing->status = ListingStatus::from($validated['status']);
+        $listing->save();
+
+        if ($listing->status === ListingStatus::Published) {
+            $listing->searchable();
+        } else {
+            $listing->unsearchable();
+        }
+
+        return back()->with('success', "Статус листинга изменён на «{$listing->status->value}».");
+    }
+
     // -------------------------------------------------------------------------
     // AJAX
     // -------------------------------------------------------------------------

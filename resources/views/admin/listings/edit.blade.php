@@ -335,6 +335,36 @@
                 </div>
             </div>
 
+            {{-- Status --}}
+            <div class="card border-0 shadow-sm mb-4 border-start border-4 border-warning">
+                <div class="card-header bg-transparent border-0 pt-3 pb-0">
+                    <h6 class="fw-semibold mb-0">
+                        <i class="ph ph-toggle-right me-2 text-warning"></i>Статус
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <form method="POST"
+                          action="{{ route('admin.listings.set-status', $listing) }}">
+                        @csrf
+                        @method('PATCH')
+                        <div class="mb-2">
+                            <x-status-badge :status="$statusVal" />
+                        </div>
+                        <select class="form-select form-select-sm mb-2" name="status">
+                            @foreach(\App\Enums\ListingStatus::cases() as $s)
+                                <option value="{{ $s->value }}"
+                                        {{ $s->value === $statusVal ? 'selected' : '' }}>
+                                    {{ $s->value }}
+                                </option>
+                            @endforeach
+                        </select>
+                        <button type="submit" class="btn btn-warning btn-sm w-100">
+                            <i class="ph ph-check me-1"></i>Изменить статус
+                        </button>
+                    </form>
+                </div>
+            </div>
+
             {{-- Region --}}
             <div class="card border-0 shadow-sm mb-4">
                 <div class="card-header bg-transparent border-0 pt-3 pb-0">
