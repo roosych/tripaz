@@ -336,6 +336,16 @@
             </div>
 
             {{-- Status --}}
+            @php
+                $statusLabels = [
+                    'draft'            => 'Черновик',
+                    'pending_review'   => 'На проверке',
+                    'published'        => 'Опубликован',
+                    'awaiting_payment' => 'Ожидает оплаты',
+                    'rejected'         => 'Отклонён',
+                    'suspended'        => 'Приостановлен',
+                ];
+            @endphp
             <div class="card border-0 shadow-sm mb-4 border-start border-4 border-warning">
                 <div class="card-header bg-transparent border-0 pt-3 pb-0">
                     <h6 class="fw-semibold mb-0">
@@ -343,25 +353,24 @@
                     </h6>
                 </div>
                 <div class="card-body">
-                    <form method="POST"
-                          action="{{ route('admin.listings.set-status', $listing) }}">
-                        @csrf
-                        @method('PATCH')
-                        <div class="mb-2">
-                            <x-status-badge :status="$statusVal" />
-                        </div>
-                        <select class="form-select form-select-sm mb-2" name="status">
-                            @foreach(\App\Enums\ListingStatus::cases() as $s)
-                                <option value="{{ $s->value }}"
-                                        {{ $s->value === $statusVal ? 'selected' : '' }}>
-                                    {{ $s->value }}
-                                </option>
-                            @endforeach
-                        </select>
-                        <button type="submit" class="btn btn-warning btn-sm w-100">
-                            <i class="ph ph-check me-1"></i>Изменить статус
-                        </button>
-                    </form>
+                    <div class="mb-2">
+                        <x-status-badge :status="$statusVal" />
+                    </div>
+                    <select class="form-select form-select-sm mb-2"
+                            name="status"
+                            form="set-status-form">
+                        @foreach(\App\Enums\ListingStatus::cases() as $s)
+                            <option value="{{ $s->value }}"
+                                    {{ $s->value === $statusVal ? 'selected' : '' }}>
+                                {{ $statusLabels[$s->value] ?? $s->value }}
+                            </option>
+                        @endforeach
+                    </select>
+                    <button type="submit"
+                            form="set-status-form"
+                            class="btn btn-warning btn-sm w-100">
+                        <i class="ph ph-check me-1"></i>Изменить статус
+                    </button>
                 </div>
             </div>
 
@@ -593,6 +602,15 @@
 
         </div>
     </div>
+</form>
+
+{{-- Separate form for status change (outside main form to avoid nested-form issue) --}}
+<form id="set-status-form"
+      method="POST"
+      action="{{ route('admin.listings.set-status', $listing) }}"
+      style="display:none;">
+    @csrf
+    @method('PATCH')
 </form>
 
 @endsection
