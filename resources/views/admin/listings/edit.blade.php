@@ -1502,15 +1502,24 @@ $(function () {
         maxZoom: 19
     }).addTo(map);
 
+    var defaultIcon = L.icon({
+        iconUrl:      'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+        iconRetinaUrl:'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+        shadowUrl:    'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+        iconSize:    [25, 41],
+        iconAnchor:  [12, 41],
+        shadowSize:  [41, 41]
+    });
+
     var marker = hasCoords
-        ? L.marker([initLat, initLng]).addTo(map)
+        ? L.marker([initLat, initLng], { icon: defaultIcon }).addTo(map)
         : null;
 
     function setMarker(lat, lng) {
         if (marker) {
             marker.setLatLng([lat, lng]);
         } else {
-            marker = L.marker([lat, lng]).addTo(map);
+            marker = L.marker([lat, lng], { icon: defaultIcon }).addTo(map);
         }
         map.setView([lat, lng], Math.max(map.getZoom(), PIN_ZOOM));
     }

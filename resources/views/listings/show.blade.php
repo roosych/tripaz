@@ -1081,8 +1081,14 @@
     var lng = {{ (float) $location->longitude }};
     var title = @json($translation?->title ?? 'Location');
 
-    var iconHtml = '<div style="background:#0d6efd;color:#fff;padding:6px 10px;border-radius:20px;font-size:13px;font-weight:600;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.3)">' +
-                   '<i class="ph ph-map-pin me-1"></i>' + title + '</div>';
+    var defaultIcon = L.icon({
+        iconUrl:       'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+        iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+        shadowUrl:     'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+        iconSize:    [25, 41],
+        iconAnchor:  [12, 41],
+        shadowSize:  [41, 41]
+    });
 
     // Small sidebar map
     var map = L.map('listing-map').setView([lat, lng], 14);
@@ -1090,10 +1096,7 @@
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
         maxZoom: 19,
     }).addTo(map);
-    L.marker([lat, lng], { icon: L.divIcon({ className: '', html: iconHtml, iconAnchor: [0, 0] }) })
-        .addTo(map)
-        .bindPopup('<strong>' + title + '</strong>')
-        .openPopup();
+    L.marker([lat, lng], { icon: defaultIcon }).addTo(map);
 
     // Modal map — init once on first open
     var modalMap = null;
@@ -1104,7 +1107,7 @@
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
             maxZoom: 19,
         }).addTo(modalMap);
-        L.marker([lat, lng], { icon: L.divIcon({ className: '', html: iconHtml, iconAnchor: [0, 0] }) })
+        L.marker([lat, lng], { icon: defaultIcon })
             .addTo(modalMap)
             .bindPopup('<strong>' + title + '</strong>')
             .openPopup();
