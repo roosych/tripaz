@@ -41,6 +41,7 @@ class Listing extends Model
         'is_featured',
         'booking_enabled',
         'payment_required',
+        'price_from',
         'contact_email',
         'contact_phone',
         'website_url',
@@ -59,6 +60,7 @@ class Listing extends Model
             'is_featured'      => 'boolean',
             'booking_enabled'  => 'boolean',
             'payment_required' => 'boolean',
+            'price_from'       => 'decimal:2',
             'social_links'     => 'array',
         ];
     }

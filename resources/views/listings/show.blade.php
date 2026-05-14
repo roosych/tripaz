@@ -97,27 +97,30 @@
                     {{-- Type badge --}}
                     <span class="badge {{ $typeBadgeClass }} mb-2">{{ $typeLabel }}</span>
 
-                    {{-- Star rating --}}
-                    @if($avgRating > 0)
-                        <div class="listing-page-stars mb-2">
-                            @for($s = 1; $s <= 5; $s++)
-                                @if($s <= floor($avgRating))
-                                    <i class="ph ph-star"></i>
-                                @elseif($s - $avgRating < 1 && $s - $avgRating > 0)
-                                    <i class="ph ph-star-half"></i>
-                                @else
-                                    <i class="ph ph-star"></i>
-                                @endif
-                            @endfor
-                            <span class="listing-page-stars-value">{{ number_format($avgRating, 1) }}</span>
-                            @if($reviewCount > 0)
-                                <span class="listing-page-stars-count">({{ $reviewCount }} reviews)</span>
-                            @endif
-                        </div>
-                    @endif
+                    {{-- Star rating (hidden until reviews are enabled) --}}
 
                     {{-- Title --}}
                     <h1 class="listing-page-title">{{ $translation?->title ?? '—' }}</h1>
+
+                    {{-- Price badge --}}
+                    @if($listing->price_from)
+                        @php
+                            $headerPriceUnit = match($listing->type->value) {
+                                'hotel', 'home'    => __('listings.per_night'),
+                                'tour', 'activity' => __('listings.per_person'),
+                                'guide'            => __('listings.per_day'),
+                                default            => null,
+                            };
+                        @endphp
+                        <div class="mb-2">
+                            <span class="fw-bold" style="font-size: 1.2rem; color: var(--tripaz-primary);">
+                                {{ __('listings.price_from') }} {{ number_format((float)$listing->price_from, 0) }} ₼
+                            </span>
+                            @if($headerPriceUnit)
+                                <span class="text-muted small">/ {{ $headerPriceUnit }}</span>
+                            @endif
+                        </div>
+                    @endif
 
                     {{-- Address --}}
                     @if($fullAddress)
@@ -885,10 +888,10 @@
                             @if($socials->isNotEmpty())
                                 @php
                                     $socialConfig = [
-                                        'instagram' => ['icon' => 'bi-instagram', 'color' => '#E1306C'],
-                                        'facebook'  => ['icon' => 'bi-facebook',  'color' => '#1877F2'],
-                                        'tiktok'    => ['icon' => 'bi-tiktok',    'color' => '#000'],
-                                        'whatsapp'  => ['icon' => 'bi-whatsapp',  'color' => '#25D366'],
+                                        'instagram' => ['icon' => 'ph-instagram-logo', 'label' => 'Instagram', 'color' => '#E1306C'],
+                                        'facebook'  => ['icon' => 'ph-facebook-logo',  'label' => 'Facebook',  'color' => '#1877F2'],
+                                        'tiktok'    => ['icon' => 'ph-tiktok-logo',    'label' => 'TikTok',    'color' => '#010101'],
+                                        'whatsapp'  => ['icon' => 'ph-whatsapp-logo',  'label' => 'WhatsApp',  'color' => '#25D366'],
                                     ];
                                 @endphp
                                 <div class="d-flex flex-wrap gap-2 mb-2">
@@ -904,9 +907,10 @@
                                                     : $link['value'];
                                             @endphp
                                             <a href="{{ $href }}" target="_blank" rel="noopener"
-                                               title="{{ ucfirst($platform) }}"
-                                               style="color: {{ $cfg['color'] }}; font-size: 1.4rem; line-height: 1;">
+                                               class="d-inline-flex align-items-center gap-1 text-decoration-none px-2 py-1 rounded-2 small fw-semibold"
+                                               style="color: {{ $cfg['color'] }}; background: {{ $cfg['color'] }}18; border: 1px solid {{ $cfg['color'] }}33;">
                                                 <i class="ph {{ $cfg['icon'] }}"></i>
+                                                {{ $cfg['label'] }}
                                             </a>
                                         @endif
                                     @endforeach

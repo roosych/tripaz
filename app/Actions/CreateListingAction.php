@@ -36,6 +36,7 @@ class CreateListingAction
                 'user_id'       => $data->userId,
                 'type'          => $data->type->value,
                 'status'        => ListingStatus::Draft->value,
+                'price_from'    => $data->priceFrom,
                 'contact_email' => $data->contactEmail,
                 'contact_phone' => $data->contactPhone,
                 'website_url'   => $data->websiteUrl,

@@ -144,6 +144,7 @@ class ListingController extends Controller
             translations: $translations,
             location:     $location,
             detail:       $detail,
+            priceFrom:    isset($validated['price_from']) ? (float) $validated['price_from'] : null,
             contactEmail: $validated['contact_email'] ?? null,
             contactPhone: $validated['contact_phone'] ?? null,
             websiteUrl:   $validated['website_url'] ?? null,
@@ -206,6 +207,7 @@ class ListingController extends Controller
         $listing->update([
             'user_id'       => $validated['user_id'] ? (int) $validated['user_id'] : null,
             'status'        => $newStatus,
+            'price_from'    => $validated['price_from'] ?? null,
             'contact_email' => $validated['contact_email'] ?? $listing->contact_email,
             'contact_phone' => $validated['contact_phone'] ?? $listing->contact_phone,
             'website_url'   => $validated['website_url'] ?? $listing->website_url,
@@ -450,6 +452,7 @@ class ListingController extends Controller
     {
         $base = [
             'type'                            => 'required|string',
+            'price_from'                      => 'nullable|numeric|min:0',
             'contact_email'                   => 'nullable|email|max:255',
             'contact_phone'                   => 'nullable|string|max:30',
             'website_url'                     => 'nullable|url|max:255',

@@ -17,6 +17,7 @@ final readonly class CreateListingData
         public array $translations,
         public LocationData $location,
         public HotelDetailData|HomeDetailData|TourDetailData|ActivityDetailData|GuideDetailData|RestaurantDetailData $detail,
+        public ?float $priceFrom = null,
         public ?string $contactEmail = null,
         public ?string $contactPhone = null,
         public ?string $websiteUrl = null,

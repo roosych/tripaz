@@ -2,12 +2,14 @@
 
 @section('title', 'Edit Listing')
 
-@push('styles')
+@section('head')
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <style>
 .ring-cover { outline: 2px solid #ffc107; outline-offset: 1px; }
 #photo-drop-zone:hover, #photo-drop-zone.dragover { background: #f8f9fa; border-color: #6c757d !important; }
+#listing-map { height: 200px; border-radius: 8px; z-index: 0; }
 </style>
-@endpush
+@endsection
 
 @section('content')
 
@@ -134,7 +136,7 @@
 
                     @foreach(['az' => 'Azerbaijani', 'ru' => 'Russian', 'en' => 'English'] as $locale => $localeName)
                         @php $trans = $listing->translations->firstWhere('locale', $locale); @endphp
-                        <div class="{{ $loop->last ? 'mb-0' : 'mb-3' }}">
+                        <div class="mb-3">
                             <label for="description_{{ $locale }}" class="form-label fw-semibold">
                                 Description ({{ $localeName }})
                                 @if($locale === 'az') <span class="text-danger">*</span> @endif
@@ -149,6 +151,25 @@
                                           rows="5"
                                           {{ $locale === 'az' ? 'required' : '' }}>{{ old("translations.{$locale}.description", $trans?->description) }}</textarea>
                                 @error("translations.{$locale}.description")
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="{{ $loop->last ? 'mb-0' : 'mb-3' }}">
+                            <label for="address_{{ $locale }}" class="form-label fw-semibold">
+                                Address ({{ $localeName }})
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light text-muted" style="font-size:0.75rem;font-weight:700">
+                                    {{ strtoupper($locale) }}
+                                </span>
+                                <input type="text"
+                                       class="form-control @error("translations.{$locale}.address") is-invalid @enderror"
+                                       id="address_{{ $locale }}"
+                                       name="translations[{{ $locale }}][address]"
+                                       value="{{ old("translations.{$locale}.address", $trans?->address) }}"
+                                       placeholder="Физический адрес объекта">
+                                @error("translations.{$locale}.address")
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -367,28 +388,90 @@
                 </div>
             </div>
 
-            {{-- Region --}}
+            {{-- Price --}}
             <div class="card border-0 shadow-sm mb-4">
                 <div class="card-header bg-transparent border-0 pt-3 pb-0">
                     <h6 class="fw-semibold mb-0">
-                        <i class="ph ph-map-pin me-2 text-primary"></i>Region
+                        <i class="ph ph-currency-circle-dollar me-2 text-success"></i>Цена
                     </h6>
                 </div>
                 <div class="card-body">
-                    <select class="form-select @error('location.region_id') is-invalid @enderror"
-                            name="location[region_id]"
-                            id="region_id">
-                        <option value="">— Choose a region —</option>
-                        @foreach($regions ?? [] as $region)
-                            <option value="{{ $region->id }}"
-                                    {{ old('location.region_id', $listing->location?->region_id) == $region->id ? 'selected' : '' }}>
-                                {{ $region->getTranslation('name', 'az') }}
-                            </option>
-                        @endforeach
-                    </select>
-                    @error('location.region_id')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
+                    <label for="price_from" class="form-label fw-semibold">Цена от (₼)</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="ph ph-currency-dollar-simple"></i></span>
+                        <input type="number"
+                               class="form-control @error('price_from') is-invalid @enderror"
+                               id="price_from"
+                               name="price_from"
+                               value="{{ old('price_from', $listing->price_from) }}"
+                               min="0"
+                               step="0.01"
+                               placeholder="0.00">
+                        @error('price_from')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="form-text text-muted">Минимальная цена за ночь / услугу. Оставьте пустым если цена не применима.</div>
+                </div>
+            </div>
+
+            {{-- Location --}}
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-transparent border-0 pt-3 pb-0">
+                    <h6 class="fw-semibold mb-0">
+                        <i class="ph ph-map-pin me-2 text-primary"></i>Локация
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="region_id" class="form-label fw-semibold">Регион</label>
+                        <select class="form-select @error('location.region_id') is-invalid @enderror"
+                                name="location[region_id]"
+                                id="region_id">
+                            <option value="">— Выберите регион —</option>
+                            @foreach($regions ?? [] as $region)
+                                <option value="{{ $region->id }}"
+                                        {{ old('location.region_id', $listing->location?->region_id) == $region->id ? 'selected' : '' }}>
+                                    {{ $region->getTranslation('name', 'az') }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('location.region_id')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="row g-2 mb-2">
+                        <div class="col-6">
+                            <label for="location_latitude" class="form-label fw-semibold">Широта</label>
+                            <input type="number"
+                                   class="form-control @error('location.latitude') is-invalid @enderror"
+                                   id="location_latitude"
+                                   name="location[latitude]"
+                                   value="{{ old('location.latitude', $listing->location?->latitude) }}"
+                                   step="0.00000001"
+                                   placeholder="40.4093">
+                            @error('location.latitude')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="col-6">
+                            <label for="location_longitude" class="form-label fw-semibold">Долгота</label>
+                            <input type="number"
+                                   class="form-control @error('location.longitude') is-invalid @enderror"
+                                   id="location_longitude"
+                                   name="location[longitude]"
+                                   value="{{ old('location.longitude', $listing->location?->longitude) }}"
+                                   step="0.00000001"
+                                   placeholder="49.8671">
+                            @error('location.longitude')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+                    <div id="listing-map"></div>
+                    <div class="form-text text-muted mt-1">
+                        <i class="ph ph-cursor-click me-1"></i>Кликните по карте чтобы задать координаты
+                    </div>
                 </div>
             </div>
 
@@ -1392,5 +1475,63 @@ $(function () {
     syncSocialEmpty();
 
 });
+</script>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function () {
+    var BAKU = [40.4093, 49.8671];
+    var DEFAULT_ZOOM = 10;
+    var PIN_ZOOM = 14;
+
+    var $lat = $('#location_latitude');
+    var $lng = $('#location_longitude');
+
+    var initLat = parseFloat($lat.val());
+    var initLng = parseFloat($lng.val());
+    var hasCoords = !isNaN(initLat) && !isNaN(initLng);
+
+    var map = L.map('listing-map').setView(
+        hasCoords ? [initLat, initLng] : BAKU,
+        hasCoords ? PIN_ZOOM : DEFAULT_ZOOM
+    );
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        maxZoom: 19
+    }).addTo(map);
+
+    var marker = hasCoords
+        ? L.marker([initLat, initLng]).addTo(map)
+        : null;
+
+    function setMarker(lat, lng) {
+        if (marker) {
+            marker.setLatLng([lat, lng]);
+        } else {
+            marker = L.marker([lat, lng]).addTo(map);
+        }
+        map.setView([lat, lng], Math.max(map.getZoom(), PIN_ZOOM));
+    }
+
+    map.on('click', function (e) {
+        var lat = parseFloat(e.latlng.lat.toFixed(8));
+        var lng = parseFloat(e.latlng.lng.toFixed(8));
+        $lat.val(lat);
+        $lng.val(lng);
+        setMarker(lat, lng);
+    });
+
+    function onInputChange() {
+        var lat = parseFloat($lat.val());
+        var lng = parseFloat($lng.val());
+        if (!isNaN(lat) && !isNaN(lng)) {
+            setMarker(lat, lng);
+        }
+    }
+
+    $lat.on('change', onInputChange);
+    $lng.on('change', onInputChange);
+}());
 </script>
 @endsection
