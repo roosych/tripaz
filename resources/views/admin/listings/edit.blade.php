@@ -8,6 +8,7 @@
 .ring-cover { outline: 2px solid #ffc107; outline-offset: 1px; }
 #photo-drop-zone:hover, #photo-drop-zone.dragover { background: #f8f9fa; border-color: #6c757d !important; }
 #listing-map { height: 200px; border-radius: 8px; z-index: 0; }
+#location_latitude::placeholder, #location_longitude::placeholder { color: #bcc0c4; }
 </style>
 @endsection
 
@@ -1515,8 +1516,9 @@ $(function () {
     }
 
     map.on('click', function (e) {
-        var lat = parseFloat(e.latlng.lat.toFixed(8));
-        var lng = parseFloat(e.latlng.lng.toFixed(8));
+        var wrapped = e.latlng.wrap();
+        var lat = parseFloat(wrapped.lat.toFixed(6));
+        var lng = parseFloat(wrapped.lng.toFixed(6));
         $lat.val(lat);
         $lng.val(lng);
         setMarker(lat, lng);

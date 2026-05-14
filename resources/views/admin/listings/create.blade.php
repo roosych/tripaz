@@ -6,6 +6,7 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <style>
 #listing-map { height: 200px; border-radius: 8px; z-index: 0; }
+#location_latitude::placeholder, #location_longitude::placeholder { color: #bcc0c4; }
 </style>
 @endsection
 
@@ -1113,8 +1114,9 @@ $(function () {
     }
 
     map.on('click', function (e) {
-        var lat = parseFloat(e.latlng.lat.toFixed(8));
-        var lng = parseFloat(e.latlng.lng.toFixed(8));
+        var wrapped = e.latlng.wrap();
+        var lat = parseFloat(wrapped.lat.toFixed(6));
+        var lng = parseFloat(wrapped.lng.toFixed(6));
         $lat.val(lat);
         $lng.val(lng);
         setMarker(lat, lng);
